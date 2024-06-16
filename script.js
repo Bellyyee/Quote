@@ -1,4 +1,11 @@
 let items = [];
+document.getElementById('unitPrice').addEventListener('input', function() {
+    setUnitPrice();
+    updateItemsTable();
+    updateTotalVolume();
+    updateTotalPrice();
+    updateFinalTotalPrice();
+});
 let unitPrice = 0; // 全局变量，用于存储每体积单价
 let needWoodenCrate = false;
 let needSkid = false;
@@ -28,7 +35,7 @@ function setUnit(unit) {
 }
 
 function setUnitPrice() {
-    unitPrice = parseFloat(document.getElementById('unitPrice').value);
+    unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
 }
 
 function selectItem(itemType) {
@@ -62,7 +69,7 @@ function selectItem(itemType) {
             break;
         case 'uprightPiano':
             itemName = 'Upright Piano';
-            dimensions = { length: 157.48, width: 67.31, height: 143.51 }; // 尺寸转换为厘米
+            dimensions = { length: 158, width: 68, height: 144 }; // 更新为新的尺寸
             // 自动选择需要木箱和需要唧底
             needWoodenCrate = true;
             needSkid = true;
@@ -84,19 +91,11 @@ function selectItem(itemType) {
     document.getElementById('width').value = dimensions.width;
     document.getElementById('height').value = dimensions.height;
 
-    if (itemType === 'custom') {
-        document.getElementById('itemName').readOnly = false;
-        document.getElementById('length').readOnly = false;
-        document.getElementById('width').readOnly = false;
-        document.getElementById('height').readOnly = false;
-    } else {
-        document.getElementById('itemName').readOnly = true;
-        document.getElementById('length').readOnly = true;
-        document.getElementById('width').readOnly = true;
-        document.getElementById('height').readOnly = true;
-    }
+    document.getElementById('itemName').readOnly = false;
+    document.getElementById('length').readOnly = false;
+    document.getElementById('width').readOnly = false;
+    document.getElementById('height').readOnly = false;
 }
-
 function toggleNeed(type) {
     if (type === 'woodenCrate') {
         needWoodenCrate = !needWoodenCrate;
@@ -185,7 +184,8 @@ function addItem() {
     const volumeM = (finalLength * finalWidth * finalHeight) / 1000000;
 
     // 检查是否已经存在相同类型的箱子 (仅适用于 S、M、L、D 箱)
-    const existingItemIndex = items.findIndex(item => item.itemName === itemName && ['S 箱', 'M 箱', 'L 箱', 'D 箱'].includes(item.itemName));
+    const mergeableItems = ['S 箱', 'M 箱', 'L 箱', 'D 箱'];
+    const existingItemIndex = items.findIndex(item => item.itemName === itemName && mergeableItems.includes(item.itemName));
 
     if (existingItemIndex !== -1) {
         // 更新已存在的箱子的数量和总价
@@ -264,7 +264,7 @@ function updateItemsTable() {
         const row = document.createElement('tr');
         const itemVolume = item.volumeM / item.quantity;
         totalVolume += item.volumeM;
-        totalPrice += item.itemTotalPrice;
+        totalPrice += (itemVolume * unitPrice * item.quantity) + item.woodenCratePrice;
 
         row.innerHTML = `
             <td>${item.itemName}</td>
@@ -272,12 +272,12 @@ function updateItemsTable() {
             <td>${item.length}</td>
             <td>${item.width}</td>
             <td>${item.height}</td>
-            <td>${item.needWoodenCrate ? '是' : ''}</td>
-            <td>${item.needSkid ? '是' : ''}</td>
+            <td>${item.needWoodenCrate ? '木箱' : ''}</td>
+            <td>${item.needSkid ? '唧底' : ''}</td>
             <td>${item.woodenCratePrice ? item.woodenCratePrice.toFixed(2) : ''}</td>
             <td>${itemVolume.toFixed(4)}</td>
             <td>${item.volumeM.toFixed(4)}</td>
-            <td>${item.itemTotalPrice.toFixed(2)}</td>
+            <td>${((itemVolume * unitPrice * item.quantity) + item.woodenCratePrice).toFixed(2)}</td>
             <td><button type="button" class="delete-button" onclick="deleteItem(${index})">刪除</button></td>
         `;
         itemsBody.appendChild(row);
@@ -321,13 +321,13 @@ function updateTotalVolume() {
 
 function updateTotalPrice() {
     const totalPriceElement = document.getElementById('totalPrice');
-    const totalPrice = items.reduce((acc, item) => acc + item.itemTotalPrice, 0);
+    const totalPrice = items.reduce((acc, item) => acc + ((item.volumeM / item.quantity) * unitPrice * item.quantity + item.woodenCratePrice), 0);
     totalPriceElement.textContent = totalPrice.toFixed(2);
 }
 
 function updateFinalTotalPrice() {
     const finalTotalPriceElement = document.getElementById('finalTotalPrice');
-    const totalPrice = items.reduce((acc, item) => acc + item.itemTotalPrice, 0);
+    const totalPrice = items.reduce((acc, item) => acc + ((item.volumeM / item.quantity) * unitPrice * item.quantity + item.woodenCratePrice), 0);
 
     const documentFee = parseFloat(document.getElementById('documentFee').value) || 0;
     const customClearance = parseFloat(document.getElementById('customClearance').value) || 0;
@@ -340,9 +340,16 @@ function updateFinalTotalPrice() {
 
 // 初始化设置
 function initialize() {
-    setUnitPrice(); // 设置每体积单价
-    updateFinalTotalPrice(); // 初始化时更新总价
-    setUnit('m³'); // 设置默认单位
+    // 设置每体积单价
+    setUnitPrice(); 
+    // 初始化时更新总价
+    updateFinalTotalPrice(); 
+    // 设置默认单位
+    setUnit('m³');
+
+    // 设置默认日期为今天
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('quoteDate').value = today;
 }
 
 // 调用初始化函数
