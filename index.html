@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>報價系統</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>報價系統</h1>
+
+    <form id="quoteForm">
+        <label id="unitPriceLabel" for="unitPrice">每體積單價 (元/m³):</label>
+        <input type="number" id="unitPrice" name="unitPrice" required><br>
+        
+        <div id="buttons">
+            <button type="button" class="item-button" onclick="selectItem('S')">S 箱</button>
+            <button type="button" class="item-button" onclick="selectItem('M')">M 箱</button>
+            <button type="button" class="item-button" onclick="selectItem('L')">L 箱</button>
+            <button type="button" class="item-button" onclick="selectItem('D')">D 箱</button>
+            <br>
+            <button type="button" class="item-button" onclick="selectItem('uprightPiano')">Upright Piano</button>
+            <button type="button" class="item-button" onclick="selectItem('custom')">自訂物品</button>
+        </div>
+        
+        <label for="itemName">物品名稱:</label>
+    <input type="text" id="itemName" name="itemName" required>
+
+    <div id="quantityWrapper">
+        <label for="quantity">件數:</label>
+        <button type="button" class="quantity-button" onclick="decrementQuantity()">-</button>
+        <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+        <button type="button" class="quantity-button" onclick="incrementQuantity()">+</button>
+    </div><br>
+
+    <label for="length">長度 (cm):</label>
+    <input type="number" id="length" name="length" required><br>
+    
+    <label for="width">寬度 (cm):</label>
+    <input type="number" id="width" name="width" required><br>
+    
+    <label for="height">高度 (cm):</label>
+    <input type="number" id="height" name="height" required><br>
+    
+    <label>是否需要木箱:</label>
+    <button type="button" class="toggle-button" id="toggleWoodenCrate" onclick="toggleNeed('woodenCrate')">需要</button>
+    <span id="woodenCratePriceWrapper" style="display: none;">
+        <label for="woodenCratePrice">木箱價錢:</label>
+        <input type="number" id="woodenCratePrice" name="woodenCratePrice" value="0" oninput="updateWoodenCratePrice()">
+    </span><br>
+    
+    <div id="skidOption" style="display:none;">
+        <label>是否需要唧底:</label>
+        <button type="button" class="toggle-button" id="toggleSkid" onclick="toggleNeed('skid')">需要</button><br>
+    </div>
+    
+    <button type="button" class="submit-button" onclick="addItem()">添加物品</button>
+</form>
+
+<h2>物品列表</h2>
+<table id="itemsTable" border="1">
+    <thead>
+        <tr>
+            <th>物品名稱</th>
+            <th>件數</th>
+            <th>長度 (cm)</th>
+            <th>寬度 (cm)</th>
+            <th>高度 (cm)</th>
+            <th>是否需要木箱</th>
+            <th>是否需要唧底</th>
+            <th>木箱價錢 (元)</th>
+            <th>單件物品體積 (m³)</th>
+            <th>物品總體積 (m³)</th>
+            <th>單項總價 (元)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody id="itemsBody">
+    </tbody>
+</table>
+
+
+    <h2>一次性收費</h2>
+    <label for="documentFee">Document Fee (元):</label>
+    <input type="number" id="documentFee" name="documentFee" value="1000" oninput="updateFinalTotalPrice()"><br>
+    <label for="customClearance">Custom Clearance (元):</label>
+    <input type="number" id="customClearance" name="customClearance" value="1100" oninput="updateFinalTotalPrice()"><br>
+    <label for="additionalFee">Additional Collect / Delivery (元):</label>
+    <input type="number" id="additionalFee" name="additionalFee" value="0" oninput="updateFinalTotalPrice()"><br>
+    <label for="pianoSurcharge">Piano Surcharge (元):</label>
+    <input type="number" id="pianoSurcharge" name="pianoSurcharge" value="0" oninput="updateFinalTotalPrice()"><br>
+
+    <h2>報價單總價: <span id="finalTotalPrice">0</span> 元</h2>
+    
+    <script src="script.js"></script>
+</body>
+</html>

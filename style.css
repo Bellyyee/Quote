@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+}
+
+input[type="number"], input[type="text"] {
+    width: 200px;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+button {
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button.item-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+button.item-button:hover {
+    background-color: #0056b3;
+}
+
+button.toggle-button {
+    background-color: white;
+    color: #28a745;
+    border: 2px solid #28a745;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+button.toggle-button.active {
+    background-color: #28a745;
+    color: white;
+}
+
+button.quantity-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+}
+
+button.submit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    display: block;
+    margin-top: 20px;
+}
+
+button.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+#quantityWrapper {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+#quantityWrapper input {
+    width: 50px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.volume-warning {
+    color: red;
+    font-size: 0.9em;
+}
