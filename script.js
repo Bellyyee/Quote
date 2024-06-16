@@ -1,4 +1,9 @@
 let items = [];
+let unitPrice = 0; // 全局变量，用于存储每体积单价
+let needWoodenCrate = false;
+let needSkid = false;
+let currentUnit = 'm³'; // 默认单位
+
 document.getElementById('unitPrice').addEventListener('input', function() {
     setUnitPrice();
     updateItemsTable();
@@ -6,10 +11,6 @@ document.getElementById('unitPrice').addEventListener('input', function() {
     updateTotalPrice();
     updateFinalTotalPrice();
 });
-let unitPrice = 0; // 全局变量，用于存储每体积单价
-let needWoodenCrate = false;
-let needSkid = false;
-let currentUnit = 'm³'; // 默认单位
 
 function setUnit(unit) {
     const unitPriceInput = document.getElementById('unitPrice');
@@ -96,6 +97,7 @@ function selectItem(itemType) {
     document.getElementById('width').readOnly = false;
     document.getElementById('height').readOnly = false;
 }
+
 function toggleNeed(type) {
     if (type === 'woodenCrate') {
         needWoodenCrate = !needWoodenCrate;
@@ -123,14 +125,24 @@ function updateWoodenCratePrice() {
 
 function incrementQuantity() {
     const quantityInput = document.getElementById('quantity');
-    quantityInput.value = parseInt(quantityInput.value) + 1;
+    const quantityRange = document.getElementById('quantityRange');
+    if (quantityInput.value < 100) {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        quantityRange.value = quantityInput.value;
+    }
 }
 
 function decrementQuantity() {
     const quantityInput = document.getElementById('quantity');
+    const quantityRange = document.getElementById('quantityRange');
     if (quantityInput.value > 1) {
         quantityInput.value = parseInt(quantityInput.value) - 1;
+        quantityRange.value = quantityInput.value;
     }
+}
+
+function syncQuantity(value) {
+    document.getElementById('quantity').value = value;
 }
 
 function addItem() {
@@ -219,8 +231,8 @@ function addItem() {
     updateItemsTable();
 
     // 更新总体积和总价
-    updateTotalVolume();
-    updateTotalPrice();
+    // updateTotalVolume();
+    // updateTotalPrice();
     updateFinalTotalPrice();
 
     // 清空表单
@@ -248,8 +260,8 @@ function deleteItem(index) {
     }
 
     updateItemsTable();
-    updateTotalVolume();
-    updateTotalPrice();
+    // updateTotalVolume();
+    // updateTotalPrice();
     updateFinalTotalPrice();
 }
 
@@ -264,7 +276,7 @@ function updateItemsTable() {
         const row = document.createElement('tr');
         const itemVolume = item.volumeM / item.quantity;
         totalVolume += item.volumeM;
-        totalPrice += (itemVolume * unitPrice * item.quantity) + item.woodenCratePrice;
+        totalPrice += item.itemTotalPrice;
 
         row.innerHTML = `
             <td>${item.itemName}</td>
@@ -277,7 +289,7 @@ function updateItemsTable() {
             <td>${item.woodenCratePrice ? item.woodenCratePrice.toFixed(2) : ''}</td>
             <td>${itemVolume.toFixed(4)}</td>
             <td>${item.volumeM.toFixed(4)}</td>
-            <td>${((itemVolume * unitPrice * item.quantity) + item.woodenCratePrice).toFixed(2)}</td>
+            <td>${item.itemTotalPrice.toFixed(2)}</td>
             <td><button type="button" class="delete-button" onclick="deleteItem(${index})">刪除</button></td>
         `;
         itemsBody.appendChild(row);
@@ -307,12 +319,13 @@ function updateItemsTable() {
 }
 
 function updateTotalVolume() {
-    const totalVolumeElement = document.getElementById('totalVolume');
-    const totalVolume = items.reduce((acc, item) => acc + item.volumeM, 0);
-    totalVolumeElement.textContent = totalVolume.toFixed(4);
+    // 隐藏總體積部分，不再更新此内容
+    // const totalVolumeElement = document.getElementById('totalVolume');
+    // const totalVolume = items.reduce((acc, item) => acc + item.volumeM, 0);
+    // totalVolumeElement.textContent = totalVolume.toFixed(4);
 
     const volumeWarningElement = document.getElementById('volumeWarning');
-    if (totalVolume < 3) {
+    if (items.reduce((acc, item) => acc + item.volumeM, 0) < 3) {
         volumeWarningElement.style.display = 'block';
     } else {
         volumeWarningElement.style.display = 'none';
@@ -320,14 +333,15 @@ function updateTotalVolume() {
 }
 
 function updateTotalPrice() {
-    const totalPriceElement = document.getElementById('totalPrice');
-    const totalPrice = items.reduce((acc, item) => acc + ((item.volumeM / item.quantity) * unitPrice * item.quantity + item.woodenCratePrice), 0);
-    totalPriceElement.textContent = totalPrice.toFixed(2);
+    // 隐藏物品總價部分，不再更新此内容
+    // const totalPriceElement = document.getElementById('totalPrice');
+    // const totalPrice = items.reduce((acc, item) => acc + item.itemTotalPrice, 0);
+    // totalPriceElement.textContent = totalPrice.toFixed(2);
 }
 
 function updateFinalTotalPrice() {
     const finalTotalPriceElement = document.getElementById('finalTotalPrice');
-    const totalPrice = items.reduce((acc, item) => acc + ((item.volumeM / item.quantity) * unitPrice * item.quantity + item.woodenCratePrice), 0);
+    const totalPrice = items.reduce((acc, item) => acc + item.itemTotalPrice, 0);
 
     const documentFee = parseFloat(document.getElementById('documentFee').value) || 0;
     const customClearance = parseFloat(document.getElementById('customClearance').value) || 0;
