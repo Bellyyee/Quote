@@ -85,7 +85,6 @@
         </tbody>
     </table>
 
-
     <h2>一次性收費</h2>
     <label for="documentFee">Document Fee (元):</label>
     <input type="number" id="documentFee" name="documentFee" value="1000" oninput="updateFinalTotalPrice()"><br>
@@ -97,7 +96,9 @@
     <input type="number" id="pianoSurcharge" name="pianoSurcharge" value="0" oninput="updateFinalTotalPrice()"><br>
 
     <h2>報價單總價: <span id="finalTotalPrice">0</span> 元</h2>
-    
+
+    <button type="button" class="print-button" onclick="printQuote()">列印</button>
+
     <script src="script.js"></script>
 </body>
 </html>

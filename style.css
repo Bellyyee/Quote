@@ -1,110 +1,188 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 20px;
+    background-color: #f8f8f8;
 }
 
 h1 {
     text-align: center;
+    color: #333;
 }
 
 form {
     margin-bottom: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 label {
-    display: inline-block;
-    width: 150px;
+    display: block;
+    margin-top: 10px;
+    color: #333;
+    font-weight: 600;
 }
 
-input[type="number"], input[type="text"] {
-    width: 200px;
-    padding: 5px;
-    margin: 5px 0;
+input[type="number"], input[type="text"], input[type="date"], input[type="range"] {
+    width: 80%;  /* 调整宽度 */
+    max-width: 400px;  /* 设置最大宽度 */
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #007aff;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+
+input[type="range"]:hover {
+    opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border: 2px solid #007aff;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 button {
-    padding: 5px 10px;
-    margin: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
     cursor: pointer;
 }
 
 button.item-button {
-    background-color: #007bff;
+    background-color: #007aff;
     color: white;
-    border: none;
-    border-radius: 3px;
 }
 
 button.item-button:hover {
-    background-color: #0056b3;
+    background-color: #005bb5;
 }
 
 button.toggle-button {
     background-color: white;
-    color: #28a745;
-    border: 2px solid #28a745;
-    border-radius: 3px;
+    color: #007aff;
+    border: 2px solid #007aff;
     transition: all 0.3s ease;
 }
 
 button.toggle-button.active {
-    background-color: #28a745;
+    background-color: #007aff;
     color: white;
 }
 
 button.quantity-button {
-    background-color: #007bff;
+    background-color: #007aff;
     color: white;
     border: none;
-    border-radius: 3px;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
 }
 
 button.submit-button {
-    background-color: #28a745;
+    background-color: #34c759;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 10px;
     display: block;
     margin-top: 20px;
 }
 
+button.submit-button:hover {
+    background-color: #28a745;
+}
+
 button.delete-button {
-    background-color: #dc3545;
+    background-color: #ff3b30;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 10px;
+}
+
+button.delete-button:hover {
+    background-color: #d32f2f;
 }
 
 #quantityWrapper {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    margin-left: 20px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-#quantityWrapper input {
-    width: 50px;
+#quantityWrapper input[type="number"] {
+    width: 60px;
     text-align: center;
+}
+
+#quantityRange {
+    width: 80%;  /* 调整宽度 */
+    max-width: 400px;  /* 设置最大宽度 */
+    margin-top: 10px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
-    padding: 10px;
+    padding: 15px;
     text-align: center;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
     background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+tr:last-child td {
+    border-bottom: none;
 }
 
 .volume-warning {
     color: red;
     font-size: 0.9em;
+}
+
+.print-button {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.print-button:hover {
+    background-color: #005bb5;
 }

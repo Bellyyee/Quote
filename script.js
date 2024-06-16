@@ -352,6 +352,11 @@ function updateFinalTotalPrice() {
     finalTotalPriceElement.textContent = finalTotalPrice.toFixed(2);
 }
 
+function printQuote() {
+    window.print();
+}
+
+
 // 初始化设置
 function initialize() {
     // 设置每体积单价
