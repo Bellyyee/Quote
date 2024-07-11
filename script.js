@@ -3,6 +3,11 @@ let unitPrice = 0; // 全局变量，用于存储每体积单价
 let needWoodenCrate = false;
 let needSkid = false;
 let currentUnit = 'm³'; // 默认单位
+let options = {
+    stairs: false,
+    legalTruckParking: false,
+    transferPlatform: false
+};
 
 document.getElementById('unitPrice').addEventListener('input', function() {
     setUnitPrice();
@@ -96,6 +101,12 @@ function selectItem(itemType) {
     document.getElementById('length').readOnly = false;
     document.getElementById('width').readOnly = false;
     document.getElementById('height').readOnly = false;
+
+    // 如果选择的是自订物品，清空物品名称输入框并聚焦
+    if (itemType === 'custom') {
+        document.getElementById('itemName').value = '';
+        document.getElementById('itemName').focus();
+    }
 }
 
 function toggleNeed(type) {
@@ -104,8 +115,16 @@ function toggleNeed(type) {
         document.getElementById('toggleWoodenCrate').classList.toggle('active', needWoodenCrate);
         document.getElementById('woodenCratePriceWrapper').style.display = needWoodenCrate ? 'inline' : 'none'; // 显示或隐藏标签和输入框
         document.getElementById('woodenCratePrice').required = needWoodenCrate; // 设置为必填
+
+        if (needWoodenCrate) {
+            // 清空木箱价钱输入框并聚焦
+            document.getElementById('woodenCratePrice').value = '';
+            document.getElementById('woodenCratePrice').focus();
+        }
+
         // 如果选择了需要木箱，显示唧底选项
         document.getElementById('skidOption').style.display = needWoodenCrate ? 'block' : 'none';
+        
         // 如果取消了木箱选择，重置唧底选项
         if (!needWoodenCrate) {
             needSkid = false;
@@ -119,30 +138,24 @@ function toggleNeed(type) {
     }
 }
 
-function updateWoodenCratePrice() {
-    updateFinalTotalPrice(); // 更新总价
+function toggleOption(option) {
+    options[option] = !options[option];
+    document.getElementById('toggle' + capitalizeFirstLetter(option)).classList.toggle('active', options[option]);
 }
 
-function incrementQuantity() {
-    const quantityInput = document.getElementById('quantity');
-    const quantityRange = document.getElementById('quantityRange');
-    if (quantityInput.value < 100) {
-        quantityInput.value = parseInt(quantityInput.value) + 1;
-        quantityRange.value = quantityInput.value;
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function handleVolumeInput() {
+    const volumeInput = document.getElementById('volume');
+    const lengthInput = document.getElementById('length');
+    const widthInput = document.getElementById('width');
+    const heightInput = document.getElementById('height');
+
+    if (lengthInput.value && widthInput.value && heightInput.value) {
+        volumeInput.value = (lengthInput.value * widthInput.value * heightInput.value / 1000000).toFixed(4);
     }
-}
-
-function decrementQuantity() {
-    const quantityInput = document.getElementById('quantity');
-    const quantityRange = document.getElementById('quantityRange');
-    if (quantityInput.value > 1) {
-        quantityInput.value = parseInt(quantityInput.value) - 1;
-        quantityRange.value = quantityInput.value;
-    }
-}
-
-function syncQuantity(value) {
-    document.getElementById('quantity').value = value;
 }
 
 function addItem() {
@@ -166,10 +179,11 @@ function addItem() {
 
     // 获取表单数据
     const itemName = document.getElementById('itemName').value;
-    const length = parseFloat(document.getElementById('length').value);
-    const width = parseFloat(document.getElementById('width').value);
-    const height = parseFloat(document.getElementById('height').value);
+    const length = parseFloat(document.getElementById('length').value) || 0;
+    const width = parseFloat(document.getElementById('width').value) || 0;
+    const height = parseFloat(document.getElementById('height').value) || 0;
     const quantity = parseInt(document.getElementById('quantity').value) || 1; // 默认为1件
+    const volumeInput = parseFloat(document.getElementById('volume').value) || 0;
     const woodenCratePrice = needWoodenCrate ? parseFloat(document.getElementById('woodenCratePrice').value) || 0 : 0; // 获取木箱价格
 
     // 获取并设置每体积单价
@@ -193,7 +207,7 @@ function addItem() {
     }
 
     // 计算体积 (m³)
-    const volumeM = (finalLength * finalWidth * finalHeight) / 1000000;
+    const volumeM = volumeInput > 0 ? volumeInput : (finalLength * finalWidth * finalHeight) / 1000000;
 
     // 检查是否已经存在相同类型的箱子 (仅适用于 S、M、L、D 箱)
     const mergeableItems = ['S 箱', 'M 箱', 'L 箱', 'D 箱'];
@@ -241,6 +255,7 @@ function addItem() {
     document.getElementById('length').value = '';
     document.getElementById('width').value = '';
     document.getElementById('height').value = '';
+    document.getElementById('volume').value = '';
     needWoodenCrate = false;
     needSkid = false;
     document.getElementById('toggleWoodenCrate').classList.remove('active');
@@ -355,7 +370,6 @@ function updateFinalTotalPrice() {
 function printQuote() {
     window.print();
 }
-
 
 // 初始化设置
 function initialize() {

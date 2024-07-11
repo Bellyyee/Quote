@@ -7,11 +7,34 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>報價系統</h1>
+    <h1>Hong Kong Relocation Centre Quote System</h1>
 
     <!-- 在页面顶部添加日期输入框 -->
     <label for="quoteDate">報價日期:</label>
     <input type="date" id="quoteDate" name="quoteDate"><br>
+
+    <!-- 新增的客户信息表单 -->
+    <form id="customerForm">
+        <label for="customerName">客戶名稱:</label>
+        <input type="text" id="customerName" name="customerName" required><br>
+
+        <label for="fromAddress">From Address:</label>
+        <input type="text" id="fromAddress" name="fromAddress" required>
+        
+        <div class="option-buttons">
+            <label>樓梯:</label>
+            <button type="button" class="toggle-button" id="toggleStairs" onclick="toggleOption('stairs')">有</button>
+            
+            <label>合法貨車位:</label>
+            <button type="button" class="toggle-button" id="toggleLegalTruckParking" onclick="toggleOption('legalTruckParking')">有</button>
+            
+            <label>轉平台:</label>
+            <button type="button" class="toggle-button" id="toggleTransferPlatform" onclick="toggleOption('transferPlatform')">有</button>
+        </div><br>
+        
+        <label for="toAddress">To Address:</label>
+        <input type="text" id="toAddress" name="toAddress" required><br>
+    </form>
 
     <form id="quoteForm">
         <label id="unitPriceLabel" for="unitPrice">每體積單價 (元/m³):</label>
@@ -47,6 +70,9 @@
         
         <label for="height">高度 (cm):</label>
         <input type="number" id="height" name="height" required><br>
+
+        <label for="volume">單件物品體積 (m³):</label>
+        <input type="number" id="volume" name="volume" step="0.0001" oninput="handleVolumeInput()"><br>
         
         <label>是否需要木箱:</label>
         <button type="button" class="toggle-button" id="toggleWoodenCrate" onclick="toggleNeed('woodenCrate')">需要</button>
