@@ -111,6 +111,27 @@ function selectItem(itemType) {
             document.getElementById('skidOption').style.display = 'block';
             document.getElementById('toggleSkid').classList.add('active');
             break;
+        case 'TV':
+            itemName = 'TV';
+            break;
+        case 'Cabinet':
+            itemName = 'Cabinet';
+            break;
+        case 'Coffee Table':
+            itemName = 'Coffee Table';
+            break;
+        case 'Bed':
+            itemName = 'Bed';
+            break;
+        case 'Mattress':
+            itemName = 'Mattress';
+            break;
+        case 'Table':
+            itemName = 'Table';
+            break;
+        case 'Chair':
+            itemName = 'Chair';
+            break;
         case 'custom':
             itemName = '自訂物品';
             dimensions = { length: '', width: '', height: '' };
