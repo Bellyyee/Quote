@@ -39,6 +39,33 @@ function setUnit(unit) {
     updateTotalPrice(); // 更新总价
     updateFinalTotalPrice(); // 更新最终总价
 }
+function incrementQuantity() {
+    const quantityInput = document.getElementById('quantity');
+    const quantityRange = document.getElementById('quantityRange');
+    if (quantityInput.value < 100) {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        quantityRange.value = quantityInput.value;
+    } else {
+        alert("件數不能超過 100");
+    }
+    console.log("Quantity increased: " + quantityInput.value); // 調試訊息
+}
+
+function decrementQuantity() {
+    const quantityInput = document.getElementById('quantity');
+    const quantityRange = document.getElementById('quantityRange');
+    if (quantityInput.value > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+        quantityRange.value = quantityInput.value;
+    } else {
+        alert("件數不能少於 1");
+    }
+    console.log("Quantity decreased: " + quantityInput.value); // 調試訊息
+}
+function syncQuantity(value) {
+    const quantityInput = document.getElementById('quantity');
+    quantityInput.value = value;
+}
 
 function setUnitPrice() {
     unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
